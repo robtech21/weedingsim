@@ -1,0 +1,5 @@
+IDEAS
+
+1. Choose from a selection of "classes" (will be most likely not added)
+  Example: Negotiator class which has 2 less strength to start with but prices in the shop will be lowered a little.
+2. More dynamic shops (randomized items with varying prices)
