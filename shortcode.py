@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-import npyscreen,os,termcolor,random,time
-from termcolor import colored
+import npyscreen,os,random,time
+from npyscreen import wrapper_basic,Form,Popup,MultiLine
 doDebug = True
-color = colored
 green = "green"
-def clr():
-  os.system("clear")
+if doDebug == False:
+  def clr():
+    os.system("clear")
 if doDebug == True:
   def clr():
     print("")
