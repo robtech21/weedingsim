@@ -1,5 +1,21 @@
 #!/usr/bin/env python3
 
+# Part of my Weeding Simulator game
+# Copyright (C) 2021 Robert Furr
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 #How the heck did I go from using nano on a Raspberry Pi Zero to make basic CLI interfaces to a dual monitor setup on a PC with Visual Studio making crap like this
 
 import shortcode
@@ -29,7 +45,15 @@ def confirmExit(*args):
   choice = exitChoice.value
   return choice
 
-#Save confirmation and game saved messages
+#Save messages
+
+#Save menu
+def saveMenu(*args):
+  global saveSelected
+  F = Form(name="Save Menu")
+  fad = F.add
+  fad(tft,name="Save Files:")
+#Confirm Save dialog
 def confirmSave(*args):
   global doSave
   F = Popup(name="Confirm Save")
@@ -37,10 +61,13 @@ def confirmSave(*args):
   saveChoice = F.add(nps.TitleText,name="Type 'yes' or 'y' to continue")
   F.edit()  
   doSave = saveChoice.value
+#Game saved message
 def gameSaved(*args):
   F = Popup(name="Game Saved")
   F.add(tft,name="Game saved, press enter to continue.",editable=False)
   F.edit()
+
+
 
 #Shop message for when you don't have enough money
 def notEnoughMoney(*args):
@@ -115,8 +142,11 @@ def levelUp(*args):
 def easyResults(*args):
   F = Popup(name="Results")
   fad = F.add
-  fad(tft,name="-"+str(easyStrength)+" Strength",editable=False)
-  fad(tft,name="+"+str(easyExpGain)+" EXP",editable=False)
+  #fad(tft,name="-"+str(easyStrength)+" Strength",editable=False)
+  #fad(tft,name="+"+str(easyExpGain)+" EXP",editable=False)
+  fad(tft,name="Strength:",value='-'+str(easyStrength),editable=False)
+  fad(tft,name="EXP:",value='+'+str(easyExpGain),editable=False)
+
   fad(tft,name="Press Enter",editable=False)
   F.edit()
 
@@ -124,8 +154,10 @@ def easyResults(*args):
 def mediumResults(*args):
   F = Popup(name="Results")
   fad = F.add
-  fad(tft,name="-"+str(mediumStrength)+" Strength",editable=False)
-  fad(tft,name="+"+str(mediumExpGain)+" EXP",editable=False)
+  #fad(tft,name="-"+str(mediumStrength)+" Strength",editable=False)
+  #fad(tft,name="+"+str(mediumExpGain)+" EXP",editable=False)
+  fad(tft,name="Strength:",value='-'+str(mediumStrength),editable=False)
+  fad(tft,name="EXP:",value='+'+str(mediumExpGain),editable=False)
   fad(tft,name="Press Enter",editable=False)
   F.edit()
 
@@ -133,8 +165,10 @@ def mediumResults(*args):
 def hardResults(*args):
   F = Popup(name="Results")
   fad = F.add
-  fad(tft,name="-"+str(hardStrength)+" Strength",editable=False)
-  fad(tft,name="+"+str(hardExpGain)+" EXP",editable=False)
+  #fad(tft,name="-"+str(hardStrength)+" Strength",editable=False)
+  #fad(tft,name="+"+str(hardExpGain)+" EXP",editable=False)
+  fad(tft,name="Strength:",value='-'+str(hardStrength),editable=False)
+  fad(tft,name="EXP:",value='+'+str(hardExpGain),editable=False)
   F.edit()
 
 #Choose maximum level for when the game ends
@@ -144,7 +178,7 @@ def preNewGame(*args):
   F.add(tft, name="Choose the max level:", editable=False)
   lvlMax = F.add(tt,name="Level",value="20")
   F.edit()
-  lvlMax = eval(lvlMax.value)
+  lvlMax = int(lvlMax.value)
 
 #General menu for in-game stuff
 def inGameMenu(*args):
@@ -204,7 +238,6 @@ def shopMenu(*args):
 
 #Weed pulling menu
 def weedsMenu(*args):
-  #global lvl,money,expRequirement,exp,strengthLimit,easyExpGain,mediumExpGain,mediumExpGain,daynum,strength,easyStrength,mediumStrength,hardStrength,shovels,gloves,hormones,shovelCost,glovesCost,hormoneesCost,strengthGain,weedsChoice
   global weedsChoice
   F = Form(name="Pull Weeds")
   fad = F.add
@@ -256,7 +289,7 @@ while True:
         money = money + moneyAmount
         lvl = lvl + 1
         wrapper_basic(levelUp)
-      #Just an easter egg
+      #Just an easter egg - kind of
       if daynum == 1000:
         wrapper_basic(ominousMessage1)
         easyExpGain = easyExpGain - 2

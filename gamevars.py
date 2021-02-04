@@ -20,3 +20,4 @@ shovelCost=200
 glovesCost=150
 hormonesCost=250
 strengthGain=2
+lvlMax = 20
