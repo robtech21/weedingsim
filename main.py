@@ -20,7 +20,7 @@ import shortcode
 from shortcode import *
 os.system("clear")
 #splash text that I copied over from the original CLI verision
-splashtxtlist = ["You can thank COVID for this game","What's 9+10?","Follow me @rob.amd64 on Instagram","I'm running out of splash text ideas","I hope this is entertaining","Imagine actually looking at the splash text","Part of me, wholeheartedly."]
+splashtxtlist = ["My life for Aiur!","You can thank COVID for this game","What's 9+10?","Follow me @rob.amd64 on Instagram","I'm running out of splash text ideas","I hope this is entertaining","Imagine actually looking at the splash text","Part of me, wholeheartedly."]
 def aboutMenu(*args):
   F = nps.Form(name="About")
   fad = F.add
