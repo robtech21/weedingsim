@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
 
-#How the heck did I go from using nano on a Raspberry Pi Zero to make basic CLI interfaces to a dual monitor setup on a PC with Visual Studio making crap like this
+# Part of my Weeding Simulator game
+# Copyright (C) 2021 Robert Furr
 
-import shortcode
-from shortcode import *
-import gamevars
-from gamevars import *
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+from appmodules.shortcode import *
+from appmodules.gamevars import *
 moneylist = [50,50,100,100,150]
 Form = nps.Form
 
@@ -29,7 +41,28 @@ def confirmExit(*args):
   choice = exitChoice.value
   return choice
 
-#Save confirmation and game saved messages
+#Save messages
+
+#Load menu
+def loadMenu(*args):
+  global loadFileSelected
+  F = Form(name="Load Menu")
+  fad = F.add
+  fad(tft,name="Select a savefile to load from:",editable=False)
+  file = fad(MultiLine,max_height=4,scroll_exit=True,values=['Save 1','Save 2','Save 3','Save 4'])
+  F.edit()
+  loadFileSelected = file.value
+
+#Save menu
+def saveMenu(*args):
+  global saveSelected
+  F = Form(name="Save Menu")
+  fad = F.add
+  fad(tft,name="Select a savefile to save to:", editable=False)
+  saveChosen = fad(MultiLine, max_height=4, scroll_exit=True, values=['Save 1','Save 2','Save 3','Save 4'])
+  F.edit()
+  saveSelected = saveChosen.value
+#Confirm Save dialog
 def confirmSave(*args):
   global doSave
   F = Popup(name="Confirm Save")
@@ -37,6 +70,7 @@ def confirmSave(*args):
   saveChoice = F.add(nps.TitleText,name="Type 'yes' or 'y' to continue")
   F.edit()  
   doSave = saveChoice.value
+#Game saved message
 def gameSaved(*args):
   F = Popup(name="Game Saved")
   F.add(tft,name="Game saved, press enter to continue.",editable=False)
@@ -115,8 +149,11 @@ def levelUp(*args):
 def easyResults(*args):
   F = Popup(name="Results")
   fad = F.add
-  fad(tft,name="-"+str(easyStrength)+" Strength",editable=False)
-  fad(tft,name="+"+str(easyExpGain)+" EXP",editable=False)
+  #fad(tft,name="-"+str(easyStrength)+" Strength",editable=False)
+  #fad(tft,name="+"+str(easyExpGain)+" EXP",editable=False)
+  fad(tft,name="Strength:",value='-'+str(easyStrength),editable=False)
+  fad(tft,name="EXP:",value='+'+str(easyExpGain),editable=False)
+
   fad(tft,name="Press Enter",editable=False)
   F.edit()
 
@@ -124,8 +161,10 @@ def easyResults(*args):
 def mediumResults(*args):
   F = Popup(name="Results")
   fad = F.add
-  fad(tft,name="-"+str(mediumStrength)+" Strength",editable=False)
-  fad(tft,name="+"+str(mediumExpGain)+" EXP",editable=False)
+  #fad(tft,name="-"+str(mediumStrength)+" Strength",editable=False)
+  #fad(tft,name="+"+str(mediumExpGain)+" EXP",editable=False)
+  fad(tft,name="Strength:",value='-'+str(mediumStrength),editable=False)
+  fad(tft,name="EXP:",value='+'+str(mediumExpGain),editable=False)
   fad(tft,name="Press Enter",editable=False)
   F.edit()
 
@@ -133,8 +172,10 @@ def mediumResults(*args):
 def hardResults(*args):
   F = Popup(name="Results")
   fad = F.add
-  fad(tft,name="-"+str(hardStrength)+" Strength",editable=False)
-  fad(tft,name="+"+str(hardExpGain)+" EXP",editable=False)
+  #fad(tft,name="-"+str(hardStrength)+" Strength",editable=False)
+  #fad(tft,name="+"+str(hardExpGain)+" EXP",editable=False)
+  fad(tft,name="Strength:",value='-'+str(hardStrength),editable=False)
+  fad(tft,name="EXP:",value='+'+str(hardExpGain),editable=False)
   F.edit()
 
 #Choose maximum level for when the game ends
@@ -144,7 +185,7 @@ def preNewGame(*args):
   F.add(tft, name="Choose the max level:", editable=False)
   lvlMax = F.add(tt,name="Level",value="20")
   F.edit()
-  lvlMax = eval(lvlMax.value)
+  lvlMax = int(lvlMax.value)
 
 #General menu for in-game stuff
 def inGameMenu(*args):
@@ -204,7 +245,6 @@ def shopMenu(*args):
 
 #Weed pulling menu
 def weedsMenu(*args):
-  #global lvl,money,expRequirement,exp,strengthLimit,easyExpGain,mediumExpGain,mediumExpGain,daynum,strength,easyStrength,mediumStrength,hardStrength,shovels,gloves,hormones,shovelCost,glovesCost,hormoneesCost,strengthGain,weedsChoice
   global weedsChoice
   F = Form(name="Pull Weeds")
   fad = F.add
@@ -229,9 +269,16 @@ while True:
     wrapper_basic(startMenu)
     if choice == 1:
       choice == ""
-      #Imports the savefile
-      import save
-      from save import *
+      #Imports the selected savefile
+      wrapper_basic(loadMenu)
+      if loadFileSelected == 0:
+        from savefiles.save1 import *
+      if loadFileSelected == 1:
+        from savefiles.save2 import *
+      if loadFileSelected == 2:
+        from savefiles.save3 import *
+      if loadFileSelected == 3:
+        from savefiles.save4 import *
     if choice == 0:
       choice = ""
       #Choose maximum level
@@ -256,7 +303,7 @@ while True:
         money = money + moneyAmount
         lvl = lvl + 1
         wrapper_basic(levelUp)
-      #Just an easter egg
+      #Just an easter egg - kind of
       if daynum == 1000:
         wrapper_basic(ominousMessage1)
         easyExpGain = easyExpGain - 2
@@ -306,8 +353,18 @@ while True:
       if choice == 3:
         wrapper_basic(confirmSave)
         if doSave == "yes" or "y":
+          wrapper_basic(saveMenu)
+          if saveSelected == 0:
+            writeFile = 'save1.py'
+          if saveSelected == 1:
+            writeFile = 'save2.py'
+          if saveSelected == 2:
+            writeFile = 'save3.py'
+          if saveSelected == 3:
+            writeFile = 'save4.py'
           pnt("Saving game...\nPlease wait.")
-          saveFile = open("save.py","w")
+          finalFile = './savefiles/'+str(writeFile)
+          saveFile = open(str(finalFile),"w")
           wrt = saveFile.write
           def nl():
             wrt("\n")
@@ -342,8 +399,15 @@ while True:
           vwrt("hormones",hormones)
           wrapper_basic(gameSaved)
           saveFile.close()
-          import save
-          from save import *
+          if saveSelected == 0:
+            from savefiles.save1 import *
+          if saveSelected == 1:
+            from savefiles.save2 import *
+          if saveSelected == 2:
+            from savefiles.save3 import *
+          if saveSelected == 3:
+            from savefiles.save4 import *
+
       #Open stats menu
       if choice == 4:
         wrapper_basic(statsMenu)
